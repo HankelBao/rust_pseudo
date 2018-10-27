@@ -1,0 +1,34 @@
+WHITESPACE = _{" "}
+
+int = @{ ("-" | "") ~ ASCII_DIGIT+}
+real = @{ ("-" | "") ~ (ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT+)}
+string = @{ "\"" ~ (!("\"") ~ ANY)* ~ "\""}
+
+variable = @{ (ASCII_ALPHANUMERIC | "_")+ }
+variable_type = {"INT" | "REAL" | "STRING"}
+
+item = { real | int | string | "(" ~ expression ~ ")" | variable }
+
+add = { "+" ~ item}
+minus = { "-" ~ item}
+times = { "*" ~ item}
+divide = { "/" ~ item}
+equal = { "=" ~ item}
+not_equal = { "<>" ~ item}
+
+operation = { add | minus | times | divide | equal | not_equal}
+key = { variable ~ ("." ~ variable)*}
+expression = { ((item|"")? ~ operation*) }
+
+assign = {key ~ "<-" ~ expression ~ NEWLINE}
+branch = {
+	"IF" ~ expression ~ NEWLINE ~
+	  "THEN" ~ NEWLINE ~
+	    blocks ~
+	"ENDIF" ~ NEWLINE
+}
+
+declare = {"DECLARE " ~ variable ~ ":" ~ variable_type ~ NEWLINE}
+
+blocks = { (declare | branch | assign)*}
+

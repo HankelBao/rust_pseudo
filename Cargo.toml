@@ -1,0 +1,8 @@
+[package]
+name = "rust_pseudo"
+version = "0.1.0"
+authors = ["hankelbao"]
+
+[dependencies]
+pest = "2.0"
+pest_derive = "2.0"
